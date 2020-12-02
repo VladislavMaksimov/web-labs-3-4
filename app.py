@@ -106,6 +106,17 @@ def tasks():
     else:
         return redirect('/login')
 
+@app.route('/tasks', methods=['POST'])
+def add_task():
+    if "user_id" not in session:
+        return redirect('/login')
+
+    title = request.form['title'] 
+    description = request.form['description']
+    user = Storage.get_user_by_id(session["user_id"])
+
+    return render_template('pages/tasks.html', user=user, tasks=[11,22,33,44,55,66,77])
+
 if __name__ == '__main__':
     app.env = 'development'
     app.run(port=3000, host='0.0.0.0', debug=True)
