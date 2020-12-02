@@ -1,7 +1,7 @@
 import sqlite3
 from pathlib import Path
 from werkzeug.security import check_password_hash, generate_password_hash
-from entities import User
+from entities import User, Task
 
 # Подключаемся к БД
 db_path = '/'.join([str(Path(__file__).parent), '..', 'db', 'database.sqlite'])
@@ -46,3 +46,19 @@ class Storage:
             return User(id=user_data[0], email=user_data[1], password=user_data[2])
         else:
             return None
+
+    @staticmethod
+    def get_tasks(user_id: int) -> list:
+        request = db.execute('SELECT * FROM tasks WHERE user_id = ?', (user_id,));
+        tasks = request.fetchall();
+        tasksList = [];
+        for task in tasks:
+            tasksList.append(Task(task[0], task[1], task[2], task[3]));
+        return tasksList;
+        
+
+    @staticmethod
+    def add_task(task: Task):
+        db.execute('INSERT INTO tasks (title, description, user_id) VALUES (?, ?, ?)',
+            (task.title, task.description, task.user_id));
+        db.commit();

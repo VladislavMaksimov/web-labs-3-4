@@ -10,3 +10,16 @@ class User:
         self.id = id
         self.email = email
         self.password = password
+
+class Task:
+    """Класс задачи
+    :param id: идентификатор
+    :param title: заголовок
+    :param description: описание
+    :param user_id: идентификатор владельца задачи
+    """
+    def __init__(self, id: int, title: str, description: str, user_id: int):
+        self.id = id
+        self.title = title
+        self.description = description
+        self.user_id = user_id

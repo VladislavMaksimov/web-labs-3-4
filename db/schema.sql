@@ -9,3 +9,13 @@ create table users
 
 create unique index users_email_uindex
 	on users (email);
+
+create table tasks
+(
+	id integer not null
+		constraint tasks_pk
+			primary key autoincrement,
+	title text not null,
+	description text,
+	user_id integer not null
+);

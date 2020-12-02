@@ -1,5 +1,5 @@
 from flask import Flask, session, render_template, redirect, request, url_for
-from entities import User
+from entities import User, Task
 from storage import Storage
 
 # Создаём приложение
@@ -102,20 +102,25 @@ def tasks():
     if 'user_id' in session:
         user_id = session['user_id']
         user = Storage.get_user_by_id(user_id)
-        return render_template('pages/tasks.html', user=user, tasks=[11,22,33,44,55, 66])
+        tasks = Storage.get_tasks(user.id)
+        return render_template('pages/tasks.html', user=user, tasks=tasks)
     else:
         return redirect('/login')
 
+# Создание новой задачи
 @app.route('/tasks', methods=['POST'])
 def add_task():
     if "user_id" not in session:
-        return redirect('/login')
+        return redirect('/login');
 
-    title = request.form['title'] 
-    description = request.form['description']
-    user = Storage.get_user_by_id(session["user_id"])
+    title = request.form['title'];
+    description = request.form['description'];
+    user = Storage.get_user_by_id(session["user_id"]);
 
-    return render_template('pages/tasks.html', user=user, tasks=[11,22,33,44,55,66,77])
+    Storage.add_task(Task(None, title, description, user.id));
+    tasks = Storage.get_tasks(user.id);
+
+    return render_template('pages/tasks.html', user=user, tasks=tasks);
 
 if __name__ == '__main__':
     app.env = 'development'
