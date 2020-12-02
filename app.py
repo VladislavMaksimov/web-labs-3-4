@@ -96,6 +96,15 @@ def logout():
     session.pop('user_id')
     return redirect(url_for('home'))
 
+# Вкладка задач
+@app.route('/tasks')
+def tasks():
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = Storage.get_user_by_id(user_id)
+        return render_template('pages/tasks.html', user=user, tasks=[11,22,33,44,55, 66])
+    else:
+        return redirect('/login')
 
 if __name__ == '__main__':
     app.env = 'development'
