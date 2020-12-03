@@ -122,6 +122,13 @@ def add_task():
 
     return render_template('pages/tasks.html', user=user, tasks=tasks);
 
+# Удаление задачи
+@app.route('/tasks/<int:taskId>', methods=['DELETE'])
+def delete_task(taskId):
+    if "user_id" not in session:
+        return redirect('/login');
+    Storage.delete_task(taskId);
+
 if __name__ == '__main__':
     app.env = 'development'
     app.run(port=3000, host='0.0.0.0', debug=True)

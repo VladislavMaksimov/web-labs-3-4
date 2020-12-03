@@ -62,3 +62,8 @@ class Storage:
         db.execute('INSERT INTO tasks (title, description, user_id) VALUES (?, ?, ?)',
             (task.title, task.description, task.user_id));
         db.commit();
+
+    @staticmethod
+    def delete_task(taskId: int):
+        db.execute('DELETE FROM tasks WHERE id = ?', (taskId,));
+        db.commit();

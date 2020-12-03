@@ -2,36 +2,30 @@
 
 {% block main %}
 <div class="container">
-  <div class="card" style="width: 18rem;">
-    <h4 class="card-header"> Создать задачу </h4>
-      <form action="/tasks" method="POST" class="card-body">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Заголовок" name="title">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Описание" name="description">
-        </div>
-          <button type="submit" class="btn btn-primary"> Создать </button>
-      </form>
-  </div>
-
-    {% for i in range(0, tasks|length) %}
-    {% if i % 3 == 0 %}
-    <div class="row mt-5">
-    {% endif %}
-      <div class="col-sm-4">
-        <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 18rem;">
+      <h4 class="card-header"> Создать задачу </h4>
+        <form action="/tasks" method="POST" class="card-body">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Заголовок" name="title">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Описание" name="description">
+          </div>
+            <button type="submit" class="btn btn-primary"> Создать </button>
+        </form>
+    </div>
+   
+    <div class="mt-5 tasks">
+      {% for i in range(0, tasks|length) %}
+        <div class="card" id="id_{{ tasks[i].id }}" style="width: 18rem;">
             <div class="card-body">
               <h5 class="card-title"> {{ tasks[i].title }} </h5>
               <p class="card-text"> {{ tasks[i].description }} </p>
-              <a href="#" class="card-link">Редактировать</a>
-              <a href="#" class="card-link">Удалить</a>
+              <a href="/tasks/{{tasks[i].id}}" class="card-link">Открыть</a>
+              <button class="card-link" onclick="deleteTask({{tasks[i].id}})">Удалить</a>
             </div>
         </div>
-      </div>
-    {% if i % 3 == 2 or (i == tasks|length and i % 3 != 2) %}
+      {% endfor %}
     </div>
-    {% endif %}
-    {% endfor %}
-  </div>
+</div>
 {% endblock %}
