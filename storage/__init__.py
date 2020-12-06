@@ -53,17 +53,28 @@ class Storage:
         tasks = request.fetchall();
         tasksList = [];
         for task in tasks:
-            tasksList.append(Task(task[0], task[1], task[2], task[3]));
+            tasksList.append(Task(task[0], task[1], task[2], task[3], task[4]));
         return tasksList;
         
 
     @staticmethod
     def add_task(task: Task):
-        db.execute('INSERT INTO tasks (title, description, user_id) VALUES (?, ?, ?)',
-            (task.title, task.description, task.user_id));
+        db.execute('INSERT INTO tasks (title, description, user_id, state) VALUES (?, ?, ?, ?)',
+            (task.title, task.description, task.user_id, task.state));
         db.commit();
 
     @staticmethod
     def delete_task(taskId: int):
         db.execute('DELETE FROM tasks WHERE id = ?', (taskId,));
+        db.commit();
+
+    @staticmethod
+    def get_task(taskId: int) -> Task:
+        request = db.execute('SELECT * FROM tasks WHERE id = ?', (taskId,));
+        task = request.fetchone();
+        return Task(task[0], task[1], task[2], task[3], task[4]);
+
+    @staticmethod
+    def set_state(taskId : int):
+        db.execute('UPDATE tasks SET state = CASE WHEN state = 0 THEN 1 ELSE 0 END WHERE id = ?', (taskId,));
         db.commit();

@@ -17,5 +17,6 @@ create table tasks
 			primary key autoincrement,
 	title text not null,
 	description text,
-	user_id integer not null
+	user_id integer not null,
+	state integer not null
 );

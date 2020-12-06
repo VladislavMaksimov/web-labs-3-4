@@ -4,6 +4,11 @@
 <div class="container">
     <div class="card" style="width: 18rem;">
       <h4 class="card-header"> Создать задачу </h4>
+      {% if error %}
+                    <div class="alert-danger">
+                        {{ error }}
+                    </div>
+      {% endif %}
         <form action="/tasks" method="POST" class="card-body">
           <div class="form-group">
             <input type="text" class="form-control" placeholder="Заголовок" name="title">
@@ -16,13 +21,19 @@
     </div>
    
     <div class="mt-5 tasks">
-      {% for i in range(0, tasks|length) %}
-        <div class="card" id="id_{{ tasks[i].id }}" style="width: 18rem;">
+      {% for task in tasks %}
+        <div class="card" id="id_{{ task.id }}" style="width: 18rem;">
+            <h4 class="card-header"> 
+              {% if task.state == true %}
+              <input type="checkbox" id="check_{{task.id}}" onclick="setState({{task.id}})" checked>
+              {% else %}
+            <input type="checkbox" id="check_{{task.id}}" onclick="setState({{task.id}})">
+              {% endif %}
+              {{ task.title }} 
+            </h4>
             <div class="card-body">
-              <h5 class="card-title"> {{ tasks[i].title }} </h5>
-              <p class="card-text"> {{ tasks[i].description }} </p>
-              <a href="/tasks/{{tasks[i].id}}" class="card-link">Открыть</a>
-              <button class="card-link" onclick="deleteTask({{tasks[i].id}})">Удалить</a>
+              <a href="/tasks/{{task.id}}" class="card-link">Открыть</a>
+              <button class="card-link" onclick="deleteTask({{task.id}})">Удалить</a>
             </div>
         </div>
       {% endfor %}

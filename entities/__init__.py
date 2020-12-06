@@ -18,8 +18,9 @@ class Task:
     :param description: описание
     :param user_id: идентификатор владельца задачи
     """
-    def __init__(self, id: int, title: str, description: str, user_id: int):
+    def __init__(self, id: int, title: str, description: str, user_id: int, state: bool):
         self.id = id
         self.title = title
         self.description = description
         self.user_id = user_id
+        self.state = state

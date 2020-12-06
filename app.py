@@ -113,11 +113,16 @@ def add_task():
     if "user_id" not in session:
         return redirect('/login');
 
+    user = Storage.get_user_by_id(session["user_id"]);
     title = request.form['title'];
     description = request.form['description'];
-    user = Storage.get_user_by_id(session["user_id"]);
 
-    Storage.add_task(Task(None, title, description, user.id));
+    if not title:
+        error = "Введите название задачи."
+        tasks = Storage.get_tasks(user.id);
+        return render_template('pages/tasks.html', error=error, user=user, tasks=tasks)
+
+    Storage.add_task(Task(None, title, description, user.id, 0));
     tasks = Storage.get_tasks(user.id);
 
     return render_template('pages/tasks.html', user=user, tasks=tasks);
@@ -128,6 +133,21 @@ def delete_task(taskId):
     if "user_id" not in session:
         return redirect('/login');
     Storage.delete_task(taskId);
+
+# Просмотр задачи
+@app.route('/tasks/<int:taskId>', methods=['GET'])
+def render_task(taskId):
+    if "user_id" not in session:
+        return redirect('/login');
+    task = Storage.get_task(taskId);
+    return render_template('pages/task.html', task=task);
+
+# Изменение состояния задачи
+@app.route('/tasks/<int:taskId>', methods=['PUT'])
+def set_state(taskId):
+    if "user_id" not in session:
+        return redirect('/login');
+    Storage.set_state(taskId);
 
 if __name__ == '__main__':
     app.env = 'development'
